@@ -20,4 +20,7 @@ express()
     
     // endpoints
     .get('/', (req, res) => res.send('Root'))
+    .get('/flights/:flightNumber', (req, res) => {
+        res.send(flights)
+    })
     .listen(PORT, () => console.log(`Listening on port ${PORT}`))

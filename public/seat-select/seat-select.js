@@ -2,16 +2,13 @@ const flightSelect 	= document.getElementById('flight')
 const showSeatsBtn 	= document.getElementById('show-seats')
 const seatsDiv 			= document.getElementById('seats-section')
 const confirmButton = document.getElementById('confirm-button')
-// const { flights } 	= require("./test-data/flightSeating")
 
 let selection = ''
 
-const renderSeats = () => {
+const renderSeats = flight => {
 	document.querySelector('.form-container').style.display = 'block'
 
 	const alpha = ['A', 'B', 'C', 'D', 'E', 'F']
-	// const flight = flights.SA231	// hardcoded
-	// console.log(flights)
 
 	for (let r = 1; r <= 10; r++) {
 		const row = document.createElement('ol')
@@ -19,15 +16,14 @@ const renderSeats = () => {
 		seatsDiv.appendChild(row)
 		for (let s = 0; s <= 5; s++) {
 			const seatNumber = `${r}${alpha[s]}`
-			const seat = document.createElement('li')
+			let seat = document.createElement('li')
 
 			// Two types of seats to render
 			const seatOccupied = `<li><label class="seat"><span id="${seatNumber}" class="occupied">${seatNumber}</span></label></li>`
 			const seatAvailable = `<li><label class="seat"><input type="radio" name="seat" value="${seatNumber}" /><span id="${seatNumber}" class="avail">${seatNumber}</span></label></li>`
 
-			// const seatObj = flight.filter(seat => seatNumber === seat.id)
-			// seat.innerHTML = seatObj.isAvailable ? seatAvailable : seatOccupied
-			seat.innerHTML = seatAvailable
+			const seatObj = flight.filter(flightSeat => seatNumber === flightSeat.id)[0]
+			seat.innerHTML = seatObj.isAvailable ? seatAvailable : seatOccupied
 			row.appendChild(seat)
 		}
 	}
@@ -55,15 +51,13 @@ const selectOption = event => {
 const showFormContent = event => {
 	const option = flightSelect.options[flightSelect.selectedIndex]
 	const flightNumber = option.value
-	fetch(`/flights/${flightNumber}`)
-		.then(res => res.json())
-		.then(data => console.log(data))
-	// TODO: contact the server to get the seating availability
-	//      - only contact the server if the flight number is this format 'SA###'.
-	//      - Do I need to create an error message if the number is not valid?
+	const pattern = /SA\d{3}/i
 
-	// TODO: Pass the response data to renderSeats to create the appropriate seat-type.
-	renderSeats()
+	if(flightNumber.match(pattern)) {
+		fetch(`/flights/${flightNumber}`)
+		.then(res => res.json())
+		.then(flights => renderSeats(flights[flightNumber]))
+	} else console.log("Invalid flight.")
 }
 
 const handleConfirmSeat = event => {

@@ -102,6 +102,23 @@ select {
     padding: 0 12px;
 }
 
+.flight-select button {
+    font-size: 20px;
+    height: 42px;
+    border: 2px solid var(--orange);
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: var(--alabama-crimson);
+    padding: 0 12px;
+    margin-left: var(--page-padding);
+}
+
+.flight-select button:hover {
+    border: 3px solid var(--alabama-crimson);
+    background-color: var(--selective-yellow);
+    color: black;
+}
+
 .plane {
     background: #fff;
     margin: 24px 24px 0;

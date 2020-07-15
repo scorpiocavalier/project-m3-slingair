@@ -59,8 +59,8 @@ const flights = {
     { id: '10C', isAvailable: true },
     { id: '10D', isAvailable: true },
     { id: '10E', isAvailable: true },
-    { id: '10F', isAvailable: true },
-  ],
-};
+    { id: '10F', isAvailable: true }
+  ]
+}
 
-module.exports = { flights };
+module.exports = { flights }

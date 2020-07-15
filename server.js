@@ -19,5 +19,6 @@ express()
     .use(express.urlencoded({extended: false}))
     
     // endpoints
-    .use((req, res) => res.send('Not Found'))
+    
+    .use((req, res) => res.send('Root'))
     .listen(PORT, () => console.log(`Listening on port ${PORT}`));

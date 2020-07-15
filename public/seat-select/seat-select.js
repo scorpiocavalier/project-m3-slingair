@@ -8,24 +8,26 @@ let selection = ''
 const renderSeats = flight => {
 	document.querySelector('.form-container').style.display = 'block'
 
-	const alpha = ['A', 'B', 'C', 'D', 'E', 'F']
+	const letters = ['A', 'B', 'C', 'D', 'E', 'F']
+	const rows = 10
 
-	for (let r = 1; r <= 10; r++) {
+	for (let r = 1; r <= rows; r++) {
 		const row = document.createElement('ol')
 		row.classList.add('row')
 		seatsDiv.appendChild(row)
-		for (let s = 0; s <= 5; s++) {
-			const seatNumber = `${r}${alpha[s]}`
+		
+		letters.forEach(letter => {
+			const seatNumber = `${ r + letter }`
 			let seat = document.createElement('li')
-
+			
 			// Two types of seats to render
 			const seatOccupied = `<li><label class="seat"><span id="${seatNumber}" class="occupied">${seatNumber}</span></label></li>`
 			const seatAvailable = `<li><label class="seat"><input type="radio" name="seat" value="${seatNumber}" /><span id="${seatNumber}" class="avail">${seatNumber}</span></label></li>`
-
+			
 			const seatObj = flight.filter(flightSeat => seatNumber === flightSeat.id)[0]
 			seat.innerHTML = seatObj.isAvailable ? seatAvailable : seatOccupied
 			row.appendChild(seat)
-		}
+		})
 	}
 
 	let seatMap = document.forms['seats'].elements['seat']
@@ -38,7 +40,7 @@ const renderSeats = flight => {
 				}
 			})
 			document.getElementById(seat.value).classList.add('selected')
-			document.getElementById('seat-number').innerText = `(${selection})`
+			document.getElementById('seat-number').innerText = ` (${selection})`
 			confirmButton.disabled = false
 		}
 	})

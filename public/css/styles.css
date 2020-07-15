@@ -90,11 +90,7 @@ p, a, li, blockquote, input {
 }
 
 .flight-select select {
-    width: 125px;
     margin-left: var(--page-padding);
-}
-
-select {
     font-size: 24px;
     height: 42px;
     border: 2px solid var(--orange);

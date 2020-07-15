@@ -48,6 +48,9 @@ const renderSeats = () => {
 	})
 }
 
+const selectOption = event => {
+	showSeatsBtn.hidden = false
+}
 
 const showFormContent = event => {
 	const option = flightSelect.options[flightSelect.selectedIndex]
@@ -78,4 +81,5 @@ const handleConfirmSeat = event => {
 	})
 }
 
+flightSelect.addEventListener('change', selectOption)
 showSeatsBtn.addEventListener('click', showFormContent)

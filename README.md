@@ -1,6 +1,6 @@
 # Module 3 - Node - Mini project
 
-<img src='public\seat-select\images\screenshots\header.png' style='width:100%' />
+<img src='public/images/screenshots/header.png' style='width:100%' />
 
 You just accepted a web developer position at Slingshot Airlines!
 
@@ -20,8 +20,8 @@ Looks like you're on your own...
 
 ### Screenshots
 
-<img src='public\seat-select\images\screenshots\seat-select.png' style='float:left;width:48%;margin-right:4%;' />
-<img src='public\seat-select\images\screenshots\confirmed.png' style='float:left;width:48%' />
+<img src='public/images/screenshots/seat-select.png' style='float:left;width:48%;margin-right:4%;' />
+<img src='public/images/screenshots/confirmed.png' style='float:left;width:48%' />
 
 ### Functionality
 

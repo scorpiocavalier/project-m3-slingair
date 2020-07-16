@@ -7,6 +7,6 @@ const reservations = [
     surname: 'McFly',
     email: 'marty@backfuture.com',
   },
-];
+]
 
-module.exports = { reservations };
+module.exports = { reservations }

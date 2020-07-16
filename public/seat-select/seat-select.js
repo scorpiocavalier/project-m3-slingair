@@ -3,7 +3,7 @@ const showSeatsBtn 	= document.getElementById('show-seats')
 const seatsDiv 			= document.getElementById('seats-section')
 const confirmButton = document.getElementById('confirm-button')
 
-let selection = ''
+let flightNumber, seatNumber
 
 const renderSeats = flight => {
 	document.querySelector('.form-container').style.display = 'block'
@@ -18,7 +18,7 @@ const renderSeats = flight => {
 		
 		letters.forEach(letter => {
 			const seatNumber = `${ r + letter }`
-			let seat = document.createElement('li')
+			const seat = document.createElement('li')
 			
 			// Two types of seats to render
 			const seatOccupied = `<li><label class="seat"><span id="${seatNumber}" class="occupied">${seatNumber}</span></label></li>`
@@ -33,49 +33,57 @@ const renderSeats = flight => {
 	let seatMap = document.forms['seats'].elements['seat']
 	seatMap.forEach(seat => {
 		seat.onclick = () => {
-			selection = seat.value
+			seatNumber = seat.value
 			seatMap.forEach(x => {
 				if (x.value !== seat.value) {
 					document.getElementById(x.value).classList.remove('selected')
 				}
 			})
 			document.getElementById(seat.value).classList.add('selected')
-			document.getElementById('seat-number').innerText = ` (${selection})`
+			document.getElementById('seat-number').innerText = ` (${seatNumber})`
 			confirmButton.disabled = false
 		}
 	})
 }
 
-const selectOption = event => {
-	showSeatsBtn.hidden = false
-}
-
-const showFormContent = event => {
-	const option = flightSelect.options[flightSelect.selectedIndex]
-	const flightNumber = option.value
+const showFormContent = async event => {
+	const option 	= flightSelect.options[flightSelect.selectedIndex]
+	flightNumber 	= option.value
 	const pattern = /SA\d{3}/i
 
 	if(flightNumber.match(pattern)) {
-		fetch(`/flights/${flightNumber}`)
-		.then(res => res.json())
-		.then(flights => renderSeats(flights[flightNumber]))
+		const res 		= await fetch(`/flights/${flightNumber}`)
+		const flight 	= await res.json()
+		renderSeats(flight)
 	} else console.log("Invalid flight.")
 }
 
-const handleConfirmSeat = event => {
+const handleConfirmSeat = async event => {
 	event.preventDefault()
-	// TODO: everything in here!
-	fetch('/users', {
+	
+	const givenName = document.getElementById('givenName').value
+	const surname 	= document.getElementById('surname').value
+	const email 		= document.getElementById('email').value
+	const flight		= flightNumber
+	const seat			= seatNumber
+
+	let newReservation = { givenName, surname, email, flight, seat }
+
+	let res = await fetch('/seat-select', {
 		method: 'POST',
-		body: JSON.stringify({
-			'givenName': document.getElementById('givenName').value
-		}),
 		headers: {
 			'Accept': 'application/json',
 			"Content-Type": "application/json"
-		}
+		},
+		body: JSON.stringify(newReservation)
 	})
+
+	newReservation = await res.json()
+	console.log(newReservation)
 }
 
-flightSelect.addEventListener('change', selectOption)
+flightSelect.addEventListener('change', event => {
+	showSeatsBtn.hidden = false
+})
 showSeatsBtn.addEventListener('click', showFormContent)
+confirmButton.addEventListener('submit', handleConfirmSeat)

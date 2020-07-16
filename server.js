@@ -1,9 +1,11 @@
 'use strict'
 
-const express       = require('express')
-const bodyParser    = require('body-parser')
-const morgan        = require('morgan')
-const { flights }   = require('./test-data/flightSeating')
+const express           = require('express')
+const bodyParser        = require('body-parser')
+const morgan            = require('morgan')
+const { uuid }			= require('uuidv4')
+const { flights }       = require('./test-data/flightSeating')
+const { reservations }  = require('./test-data/reservations')
 
 const PORT = process.env.PORT || 8000
 
@@ -19,8 +21,18 @@ express()
     .use(express.urlencoded({extended: false}))
     
     // endpoints
-    .get('/', (req, res) => res.send('Root'))
+    .get('/', (req, res) => res.send("Root"))
+
     .get('/flights/:flightNumber', (req, res) => {
-        res.send(flights)
+        const { flightNumber } = req.params
+        const flight = flights[flightNumber]
+        res.send(flight)
     })
+
+    .post('/seat-select', (req, res) => {
+        const newReservation = { id:uuid(), ...req.body }
+        reservations.push(newReservation)
+        res.send(newReservation)
+    })
+
     .listen(PORT, () => console.log(`Listening on port ${PORT}`))

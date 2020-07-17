@@ -49,13 +49,12 @@ const renderSeats = flight => {
 const showFormContent = async event => {
 	const option 	= flightSelect.options[flightSelect.selectedIndex]
 	flightNumber 	= option.value
-	const pattern = /SA\d{3}/i
 
-	if(flightNumber.match(pattern)) {
+	try {
 		const res 		= await fetch(`/flights/${flightNumber}`)
 		const flight 	= await res.json()
 		renderSeats(flight)
-	} else console.log("Invalid flight.")
+	} catch { console.log("Invalid flight.") }
 }
 
 const handleConfirmSeat = async event => {

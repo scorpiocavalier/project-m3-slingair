@@ -11,21 +11,21 @@ const renderSeats = flight => {
 	const letters = ['A', 'B', 'C', 'D', 'E', 'F']
 	const rows = 10
 
-	for (let r = 1; r <= rows; r++) {
+	for (let r = 0; r < rows; r++) {
 		const row = document.createElement('ol')
 		row.classList.add('row')
 		seatsDiv.appendChild(row)
-		
-		letters.forEach(letter => {
-			const seatNumber = `${ r + letter }`
+
+		letters.forEach((letter, index) => {
+			const seatNumber = `${r+1}${letter}`
 			const seat = document.createElement('li')
-			
-			// Two types of seats to render
+
 			const seatOccupied = `<li><label class="seat"><span id="${seatNumber}" class="occupied">${seatNumber}</span></label></li>`
 			const seatAvailable = `<li><label class="seat"><input type="radio" name="seat" value="${seatNumber}" /><span id="${seatNumber}" class="avail">${seatNumber}</span></label></li>`
-			
-			const seatObj = flight.filter(flightSeat => seatNumber === flightSeat.id)[0]
-			seat.innerHTML = seatObj.isAvailable ? seatAvailable : seatOccupied
+
+			const seatIndex = r * 6 + index
+			const currentSeat = flight[seatIndex]
+			seat.innerHTML = currentSeat.isAvailable ? seatAvailable : seatOccupied
 			row.appendChild(seat)
 		})
 	}
@@ -60,7 +60,7 @@ const showFormContent = async event => {
 
 const handleConfirmSeat = async event => {
 	event.preventDefault()
-	
+
 	const givenName = document.getElementById('givenName').value
 	const surname 	= document.getElementById('surname').value
 	const email 		= document.getElementById('email').value

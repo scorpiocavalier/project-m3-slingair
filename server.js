@@ -19,7 +19,7 @@ express()
 	.use(express.static('public'))
     .use(bodyParser.json())
     .use(express.urlencoded({extended: false}))
-    
+
     // endpoints
     .get('/', (req, res) => res.send("Root"))
 
@@ -28,6 +28,14 @@ express()
         const flight = flights[flightNumber]
         res.send(flight)
     })
+
+    .get('/confirmed?flight=flight&seat=seat&givenName=givenName&surname=surname&email=email',
+        (req, res) => {
+            // const { flight, seat, givenName, surname, email } = req.query
+            // res.redirect('/confirmed')
+            // res.send(req.query)
+        }
+    )
 
     .post('/seat-select', (req, res) => {
         const newReservation = { id:uuid(), ...req.body }

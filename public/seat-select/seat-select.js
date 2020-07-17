@@ -57,6 +57,15 @@ const showFormContent = async event => {
 	} catch { console.log("Invalid flight.") }
 }
 
+const showConfirmationPage = async reservation => {
+	const { flight, seat, givenName, surname, email } = reservation
+	const query = `/confirmed?flight=${flight}&seat=${seat}&givenName=${givenName}&surname=${surname}&email=${email}`
+	try {
+		const res					= await fetch(query)
+		// console.log(res)
+	} catch { console.log("Invalid confirmation.") }
+}
+
 const handleConfirmSeat = async event => {
 	event.preventDefault()
 
@@ -78,7 +87,8 @@ const handleConfirmSeat = async event => {
 	})
 
 	newReservation = await res.json()
-	console.log(newReservation)
+
+	showConfirmationPage(newReservation)
 }
 
 flightSelect.addEventListener('change', event => {

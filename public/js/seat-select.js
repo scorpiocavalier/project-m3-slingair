@@ -5,26 +5,27 @@ let flightNumber, seatNumber
 
 const renderSeats = flight => {
 	// Reset when selecting other flight options
-	document.getElementById('seats-section').innerHTML = ''
-
+	document.getElementById('seats-section').innerHTML 			= ''
 	document.querySelector('.form-container').style.display = 'block'
+
 	const letters = ['A', 'B', 'C', 'D', 'E', 'F']
-	const rows = flight.length / letters.length
+	const rows 		= flight.length / letters.length
 
 	for (let r = 0; r < rows; r++) {
 		const row = document.createElement('ol')
 		row.classList.add('row')
 
 		letters.forEach((letter, index) => {
-			const seatNumber = `${r+1}${letter}`
-			const seat = document.createElement('li')
+			const seatNumber 		= `${r+1}${letter}`
+			const seat 					= document.createElement('li')
 
 			const seatOccupied 	= `<li><label class="seat"><span id="${seatNumber}" class="occupied">${seatNumber}</span></label></li>`
 			const seatAvailable = `<li><label class="seat"><input type="radio" name="seat" value="${seatNumber}" /><span id="${seatNumber}" class="avail">${seatNumber}</span></label></li>`
 
-			const seatIndex = r * 6 + index
-			const currentSeat = flight[seatIndex]
-			seat.innerHTML = currentSeat.isAvailable ? seatAvailable : seatOccupied
+			const seatIndex 		= r * 6 + index
+			const currentSeat 	= flight[seatIndex]
+			seat.innerHTML 			= currentSeat.isAvailable ? seatAvailable : seatOccupied
+
 			row.appendChild(seat)
 		})
 
@@ -79,16 +80,6 @@ const handleConfirmSeat = async event => {
 
 	window.location.replace('/flights/confirmed')
 }
-
-// const showConfirmationPage = async reservation => {
-// 	const { flight, seat, givenName, surname, email } = reservation
-// 	const query = `/confirmed?flight=${flight}&seat=${seat}&givenName=${givenName}&surname=${surname}&email=${email}`
-// 	try {
-// 		const res		= await fetch(query)
-// 		const data	= await res.json()
-// 		console.log(data)
-// 	} catch { console.log("Invalid confirmation.") }
-// }
 
 flightSelect.addEventListener('change', event => showSeatsBtn.hidden = false)
 showSeatsBtn.addEventListener('click', showFormContent)

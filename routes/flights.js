@@ -4,65 +4,57 @@ const rp                = require('request-promise')
 const express           = require('express')
 const router            = express.Router()
 
-const fetchAPIData = uri => {
-  const options = {
+// API GET Options
+const fetchOptions = uri => {
+  return {
     uri: `https://journeyedu.herokuapp.com${uri}`,
     headers: { 'User-Agent': 'Request-Promise' },
     json: true
   }
-
-  try   { return rp(options) }
-  catch { console.log("Error when fetching API data.") }
 }
 
-router.get('/', async (req, res) => {
-  const data = await fetchAPIData('/slingair/flights')
-  const flights = data['flights']
-  res.status(200).send(flights)
-})
+// API POST Options
+const postOptions = (uri, data) => {
+  return {
+    method: 'POST',
+    uri: `https://journeyedu.herokuapp.com${uri}`,
+    body: { data },
+    json: true
+  }
+}
 
-router.post('/', (req, res) => res.send('POST /flights'))
-
+// Render seat-select page w/ dropdown info of all flights
 router.get('/seat-select', async (req, res) => {
-  const data = await fetchAPIData('/slingair/flights')
-  res.status(200).render('flights/seat-select', {
-    flights: data['flights'],
-    libs: ['seat-select']
-  })
+  const options = fetchOptions('/slingair/flights')
+  try {
+    const data = await rp(options)
+    res.status(200).render('flights/seat-select', {
+      flights: data['flights'],
+      libs: ['seat-select']
+    })
+  } catch (err) {
+    console.log(err.message)
+  }
 })
 
+// Create a new user reservation
 router.post('/seat-select', (req, res) => {
   const newReservation = { id: uuid(), ...req.body }
   reservations.push(newReservation)
   res.status(201).end()
 })
 
+// Render seat-select page w/ info on a specific flight
 router.get('/:flightNumber', async (req, res) => {
   const { flightNumber } = req.params
-  const data = await fetchAPIData(`/slingair/flights/${flightNumber}`)
-  res.status(200).send(data[flightNumber])
+  const options = fetchOptions(`/slingair/flights/${flightNumber}`)
+  console.log(options)
+  try {
+    const data = await rp(options)
+    res.status(200).send(data[flightNumber])
+  } catch (err) {
+    console.log(err.message)
+  }
 })
-
-router.get('/confirmed', (req, res) => {
-    // const { flight, seat, givenName, surname, email } = req.query
-    res.status(200).render('flights/confirmed', {
-      libs: ['confirmed']
-    })
-})
-
-router.get('/view-reservation', (req, res) => {
-  res.status(200).render('flights/view-reservation', {
-    libs: ['view-reservation']
-  })
-})
-
-// router.get('/confirmed?flight=flight&seat=seat&givenName=givenName&surname=surname&email=email',
-//   (req, res) => {
-//     const { flight, seat, givenName, surname, email } = req.query
-//     res.status(200).render('flights/confirmed', {
-//       libs: ['confirmed']
-//     })
-//   })
-// app.
 
 module.exports = router

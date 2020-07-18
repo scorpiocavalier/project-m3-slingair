@@ -6,10 +6,8 @@ const bodyParser        = require('body-parser')
 const morgan            = require('morgan')
 const indexRouter       = require('./routes/index')
 const flightsRouter     = require('./routes/flights')
+const usersRouter       = require('./routes/users')
 const app               = express()
-
-app.set('view engine', 'ejs')
-app.set('views', `${__dirname}/views`)
 
 app.use(morgan('dev'))
 app.use(bodyParser.json())
@@ -19,6 +17,7 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use('/', indexRouter)
 app.use('/flights', flightsRouter)
+app.use('/users', usersRouter)
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*")
@@ -29,4 +28,5 @@ app.use((req, res, next) => {
     next()
 })
 
+app.set('view engine', 'ejs')
 app.listen(process.env.PORT || 8000)

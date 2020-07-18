@@ -4,31 +4,27 @@ const rp                = require('request-promise')
 const express           = require('express')
 const router            = express.Router()
 
-router.get('/', async (req, res) => {
+const fetchAPIData = uri => {
   const options = {
-    uri: 'https://journeyedu.herokuapp.com/slingair/flights',
-    headers: {
-      'User-Agent': 'Request-Promise'
-    },
+    uri: `https://journeyedu.herokuapp.com${uri}`,
+    headers: { 'User-Agent': 'Request-Promise' },
     json: true
   }
-  response = await rp(options)
-  const flights = response['flights']
+
+  try   { return rp(options) }
+  catch { console.log("Error when fetching API data.") }
+}
+
+router.get('/', async (req, res) => {
+  const data = await fetchAPIData('/slingair/flights')
+  const flights = data['flights']
   res.status(200).send(flights)
 })
 
 router.post('/', (req, res) => res.send('POST /flights'))
 
 router.get('/seat-select', async (req, res) => {
-  const options = {
-    uri: 'https://journeyedu.herokuapp.com/slingair/flights',
-    headers: { 'User-Agent': 'Request-Promise' },
-    json: true
-  }
-
-  try   { data = await rp(options) }
-  catch { console.log("Error when fetching all flights.") }
-
+  const data = await fetchAPIData('/slingair/flights')
   res.status(200).render('flights/seat-select', {
     flights: data['flights'],
     libs: ['seat-select']
@@ -41,10 +37,10 @@ router.post('/seat-select', (req, res) => {
   res.status(201).end()
 })
 
-router.get('/:flightNumber', (req, res) => {
+router.get('/:flightNumber', async (req, res) => {
   const { flightNumber } = req.params
-  const flight = flights[flightNumber]
-  res.status(200).send(flight)
+  const data = await fetchAPIData(`/slingair/flights/${flightNumber}`)
+  res.status(200).send(data[flightNumber])
 })
 
 router.get('/confirmed', (req, res) => {

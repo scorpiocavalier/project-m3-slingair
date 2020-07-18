@@ -4,9 +4,12 @@ const showSeatsBtn 	= document.getElementById('show-seats')
 let flightNumber, seatNumber
 
 const renderSeats = flight => {
+	// Reset when selecting other flight options
+	document.getElementById('seats-section').innerHTML = ''
+
 	document.querySelector('.form-container').style.display = 'block'
 	const letters = ['A', 'B', 'C', 'D', 'E', 'F']
-	const rows = 10
+	const rows = flight.length / letters.length
 
 	for (let r = 0; r < rows; r++) {
 		const row = document.createElement('ol')

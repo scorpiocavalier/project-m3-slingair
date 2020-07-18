@@ -1,46 +1,30 @@
 'use strict'
 
 const express           = require('express')
+const expressLayouts    = require('express-ejs-layouts')
 const bodyParser        = require('body-parser')
 const morgan            = require('morgan')
-const { uuid }			= require('uuidv4')
-const { flights }       = require('./test-data/flightSeating')
-const { reservations }  = require('./test-data/reservations')
+const indexRouter       = require('./routes/index')
+const flightsRouter     = require('./routes/flights')
+const app               = express()
 
-const PORT = process.env.PORT || 8000
+app.set('view engine', 'ejs')
+app.set('views', `${__dirname}/views`)
+app.set('layout', 'layouts/layout')
 
-express()
-    .use(function(req, res, next) {
-        res.header("Access-Control-Allow-Origin", "*")
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-        next()
-    })
-	.use(morgan('dev'))
-	.use(express.static('public'))
-    .use(bodyParser.json())
-    .use(express.urlencoded({extended: false}))
+app.use(morgan('dev'))
+app.use(bodyParser.json())
+app.use(expressLayouts)
+app.use(express.static('public'))
+app.use(express.urlencoded({ extended: false }))
 
-    // endpoints
-    .get('/', (req, res) => res.send("Root"))
+app.use('/', indexRouter)
+app.use('/flights', flightsRouter)
 
-    .get('/flights/:flightNumber', (req, res) => {
-        const { flightNumber } = req.params
-        const flight = flights[flightNumber]
-        res.send(flight)
-    })
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    next()
+})
 
-    .get('/confirmed?flight=flight&seat=seat&givenName=givenName&surname=surname&email=email',
-        (req, res) => {
-            // const { flight, seat, givenName, surname, email } = req.query
-            // res.redirect('/confirmed')
-            // res.send(req.query)
-        }
-    )
-
-    .post('/seat-select', (req, res) => {
-        const newReservation = { id:uuid(), ...req.body }
-        reservations.push(newReservation)
-        res.send(newReservation)
-    })
-
-    .listen(PORT, () => console.log(`Listening on port ${PORT}`))
+app.listen(process.env.PORT || 8000)

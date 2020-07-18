@@ -20,7 +20,7 @@ const renderSeats = flight => {
 			const seatNumber = `${r+1}${letter}`
 			const seat = document.createElement('li')
 
-			const seatOccupied = `<li><label class="seat"><span id="${seatNumber}" class="occupied">${seatNumber}</span></label></li>`
+			const seatOccupied 	= `<li><label class="seat"><span id="${seatNumber}" class="occupied">${seatNumber}</span></label></li>`
 			const seatAvailable = `<li><label class="seat"><input type="radio" name="seat" value="${seatNumber}" /><span id="${seatNumber}" class="avail">${seatNumber}</span></label></li>`
 
 			const seatIndex = r * 6 + index
@@ -57,27 +57,26 @@ const showFormContent = async event => {
 	} catch { console.log("Invalid flight.") }
 }
 
-const showConfirmationPage = async reservation => {
-	const { flight, seat, givenName, surname, email } = reservation
-	const query = `/confirmed?flight=${flight}&seat=${seat}&givenName=${givenName}&surname=${surname}&email=${email}`
-	try {
-		const res					= await fetch(query)
-		// console.log(res)
-	} catch { console.log("Invalid confirmation.") }
-}
+// const showConfirmationPage = async reservation => {
+// 	const { flight, seat, givenName, surname, email } = reservation
+// 	const query = `/confirmed?flight=${flight}&seat=${seat}&givenName=${givenName}&surname=${surname}&email=${email}`
+// 	// try {
+// 	// 	const res					= await fetch(query)
+// 	// } catch { console.log("Invalid confirmation.") }
+// }
 
 const handleConfirmSeat = async event => {
 	event.preventDefault()
 
-	const givenName = document.getElementById('givenName').value
-	const surname 	= document.getElementById('surname').value
-	const email 		= document.getElementById('email').value
-	const flight		= flightNumber
-	const seat			= seatNumber
+	let newReservation = {
+		givenName: 	document.getElementById('givenName').value,
+		surname: 		document.getElementById('surname').value,
+		email: 			document.getElementById('email').value,
+		flight:			flightNumber,
+		seat:				seatNumber
+	}
 
-	let newReservation = { givenName, surname, email, flight, seat }
-
-	let res = await fetch('/seat-select', {
+	let res = await fetch('/flights/seat-select', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
@@ -87,12 +86,13 @@ const handleConfirmSeat = async event => {
 	})
 
 	newReservation = await res.json()
+	console.log(newReservation)
 
-	showConfirmationPage(newReservation)
+	// showConfirmationPage(newReservation)
 }
 
 flightSelect.addEventListener('change', event => {
 	showSeatsBtn.hidden = false
+	console.log('changed')
 })
 showSeatsBtn.addEventListener('click', showFormContent)
-confirmButton.addEventListener('submit', handleConfirmSeat)

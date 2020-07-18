@@ -65,7 +65,7 @@ const handleConfirmSeat = async event => {
 		seat:				seatNumber
 	}
 
-	let res = await fetch('/flights/seat-select', {
+	newReservation = await fetch('/flights/seat-select', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
@@ -74,8 +74,8 @@ const handleConfirmSeat = async event => {
 		body: JSON.stringify(newReservation)
 	})
 
-	newReservation = await res.json()
-	console.log(newReservation)
+	console.table(newReservation)
+
 
 	// showConfirmationPage(newReservation)
 }
@@ -83,9 +83,11 @@ const handleConfirmSeat = async event => {
 // const showConfirmationPage = async reservation => {
 // 	const { flight, seat, givenName, surname, email } = reservation
 // 	const query = `/confirmed?flight=${flight}&seat=${seat}&givenName=${givenName}&surname=${surname}&email=${email}`
-// 	// try {
-// 	// 	const res					= await fetch(query)
-// 	// } catch { console.log("Invalid confirmation.") }
+// 	try {
+// 		const res		= await fetch(query)
+// 		const data	= await res.json()
+// 		console.log(data)
+// 	} catch { console.log("Invalid confirmation.") }
 // }
 
 flightSelect.addEventListener('change', event => showSeatsBtn.hidden = false)

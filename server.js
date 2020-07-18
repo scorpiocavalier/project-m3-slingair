@@ -10,8 +10,6 @@ const app               = express()
 
 app.set('view engine', 'ejs')
 app.set('views', `${__dirname}/views`)
-app.set('layout', 'layouts/layout')
-app.set('layout extractScripts', true)
 
 app.use(morgan('dev'))
 app.use(bodyParser.json())
@@ -24,7 +22,10 @@ app.use('/flights', flightsRouter)
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    )
     next()
 })
 

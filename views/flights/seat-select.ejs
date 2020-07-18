@@ -59,4 +59,8 @@
 	</form>
 </div>
 
-<script src="seat-select.js" />
+<% if (typeof libs !== 'undefined') { %>
+ <% libs.forEach(lib => { %>
+	<script src="/js/<%= lib %>.js"></script>
+ <% }) %>
+<% } %>

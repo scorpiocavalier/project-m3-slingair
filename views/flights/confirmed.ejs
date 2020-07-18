@@ -1,10 +1,14 @@
+<% const { flight, seat, givenName, surname, email } = newReservation %>
 <div class="content confirmation">
 	<div class="user">
 		<p class="message">Your flight is confirmed!</p>
 		<ul class="user-info">
-			<li>Flight #:<span id="flight"></span> seat #: <span id="seat"></span></li>
-			<li>Name:<span id="name"></span></li>
-			<li>Email:<span id="email"></span></li>
+			<li>Flight #:
+				<span id="flight"><%= flight %></span>
+				 seat #:<span id="seat"><%= seat %></span>
+			</li>
+			<li>Name:<span id="name"><%= givenName %> <%= surname %></span></li>
+			<li>Email:<span id="email"><%= email %></span></li>
 		</ul>
 	</div>
 	<div class="tombstone"></div>
@@ -12,4 +16,8 @@
 
 <p class="footer-logo">The only way to fly!</p>
 
-<script src="confirmed.js"></script>
+<% if (typeof libs !== 'undefined') { %>
+ <% libs.forEach(lib => { %>
+	<script src="/js/<%= lib %>.js"></script>
+ <% }) %>
+<% } %>

@@ -1,20 +1,23 @@
-const { flights }       = require('../test-data/flightSeating')
-const { reservations }  = require('../test-data/reservations')
+const { reservations }  = require('../public/js/reservations')
+const { flights }       = require('../public/js/flightSeating')
 const { uuid }          = require('uuidv4')
 const express           = require('express')
 const router            = express.Router()
-const app               = express()
-
-app.set('layout extractScripts', true)
 
 router.get('/seat-select', async (req, res) => {
-  res.render('flights/seat-select')
+  res.render('flights/seat-select', {
+    libs: ['seat-select']
+  })
 })
 
 router.post('/seat-select', (req, res) => {
   const newReservation = { id: uuid(), ...req.body }
   reservations.push(newReservation)
   res.send(newReservation)
+  res.render('flights/confirmed', {
+    data: newReservation,
+    libs: ['confirmed']
+  })
 })
 
 router.get('/:flightNumber', (req, res) => {
@@ -24,11 +27,15 @@ router.get('/:flightNumber', (req, res) => {
 })
 
 router.get('/confirmed', (req, res) => {
-  res.render('flights/confirmed')
+  res.render('flights/confirmed', {
+    libs: ['confirmed']
+  })
 })
 
 router.get('/view-reservation', (req, res) => {
-  res.render('flights/view-reservation')
+  res.render('flights/view-reservation', {
+    libs: ['view-reservation']
+  })
 })
 
 // app.get('/confirmed?flight=flight&seat=seat&givenName=givenName&surname=surname&email=email',

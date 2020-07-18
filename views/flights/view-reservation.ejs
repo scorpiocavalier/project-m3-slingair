@@ -2,4 +2,8 @@
 
 <p class="footer-logo">The only way to fly!</p>
 
-<script src="view-reservation.js"></script>
+<% if (typeof libs !== 'undefined') { %>
+ <% libs.forEach(lib => { %>
+	<script src="/js/<%= lib %>.js"></script>
+ <% }) %>
+<% } %>

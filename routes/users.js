@@ -8,17 +8,4 @@ router.get('/view-reservation', (req, res) => {
   })
 })
 
-router.get('/:flightNumber/confirmed', (req, res) => {
-  res.status(200).render('users/confirmed', {
-    data: {
-      flight: "SA111",
-      seat: "1A",
-      givenName: "Bob",
-      surname: "Marley",
-      email: "haha@gmail.com"
-    },
-    libs: ['confirmed']
-  })
-})
-
 module.exports = router

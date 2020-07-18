@@ -60,6 +60,7 @@ const showFormContent = async event => {
 
 const handleConfirmSeat = async event => {
 	event.preventDefault()
+	document.getElementById('confirm-button').disabled = true
 
 	let newReservation = {
 		givenName: 	document.getElementById('givenName').value,
@@ -69,7 +70,7 @@ const handleConfirmSeat = async event => {
 		seat:				seatNumber
 	}
 
-	newReservation = await fetch('/flights/seat-select', {
+	const res = await fetch('/flights/seat-select', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
@@ -77,8 +78,8 @@ const handleConfirmSeat = async event => {
 		},
 		body: JSON.stringify(newReservation)
 	})
-
-	window.location.replace('/flights/confirmed')
+	const id = await res.json()
+	window.location.replace(`/flights/confirmed/reservation?id=${id}`)
 }
 
 flightSelect.addEventListener('change', event => showSeatsBtn.hidden = false)

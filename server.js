@@ -11,6 +11,7 @@ const app               = express()
 app.set('view engine', 'ejs')
 app.set('views', `${__dirname}/views`)
 app.set('layout', 'layouts/layout')
+app.set('layout extractScripts', true)
 
 app.use(morgan('dev'))
 app.use(bodyParser.json())

@@ -1,15 +1,14 @@
-const express           = require('express')
-const { uuid }          = require('uuidv4')
 const { flights }       = require('../test-data/flightSeating')
 const { reservations }  = require('../test-data/reservations')
+const { uuid }          = require('uuidv4')
+const express           = require('express')
 const router            = express.Router()
+const app               = express()
 
-router.get('/', async (req, res) => {
-  res.render('flights/index')
-})
+app.set('layout extractScripts', true)
 
 router.get('/seat-select', async (req, res) => {
-  res.render('flights/seat-select/index')
+  res.render('flights/seat-select')
 })
 
 router.post('/seat-select', (req, res) => {
@@ -19,9 +18,17 @@ router.post('/seat-select', (req, res) => {
 })
 
 router.get('/:flightNumber', (req, res) => {
-    const { flightNumber } = req.params
-    const flight = flights[flightNumber]
-    res.send(flight)
+  const { flightNumber } = req.params
+  const flight = flights[flightNumber]
+  res.send(flight)
+})
+
+router.get('/confirmed', (req, res) => {
+  res.render('flights/confirmed')
+})
+
+router.get('/view-reservation', (req, res) => {
+  res.render('flights/view-reservation')
 })
 
 // app.get('/confirmed?flight=flight&seat=seat&givenName=givenName&surname=surname&email=email',

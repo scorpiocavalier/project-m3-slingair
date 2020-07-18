@@ -74,10 +74,7 @@ const handleConfirmSeat = async event => {
 		body: JSON.stringify(newReservation)
 	})
 
-	console.table(newReservation)
-
-
-	// showConfirmationPage(newReservation)
+	window.location.replace('/flights/confirmed')
 }
 
 // const showConfirmationPage = async reservation => {

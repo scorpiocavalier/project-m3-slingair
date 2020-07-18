@@ -2,7 +2,9 @@
 	<label for="flight">Flight Number :</label>
 	<select name="flight" id="flight" class="flight">
 		<option value="" disabled selected>select a flight</option>
-		<option value="SA231">SA231</option>
+		<% flights.forEach(flightNumber => { %>
+			<option value=<%= flightNumber %> ><%= flightNumber %> </option>
+		<% }) %>
 	</select>
 	<button id="show-seats" type="submit" value="Show Seats" hidden>
 		Show Seats

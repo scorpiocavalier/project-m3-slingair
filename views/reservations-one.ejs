@@ -1,10 +1,12 @@
+<% const { id, flight, seat, givenName, surname, email } = response.data %>
+
 <div class="content confirmation">
 	<div class="user">
-		<p class="message">Your flight is confirmed!</p>
+		<p class="message">Your Flight Reservation</p>
 		<ul class="user-info">
-			<li>Flight #:<span id="flight"><%= flight %></span>
-				   Seat #:<span id="seat"><%= seat %></span>
-			</li>
+			<li>ID #: <span><%= id %></span></li>
+			<li>Flight #:<span id="flight"><%= flight %></span></li>
+			<li>Seat #:<span id="seat"><%= seat %></span></li>
 			<li>Name:<span id="name"><%= givenName %> <%= surname %></span></li>
 			<li>Email:<span id="email"><%= email %></span></li>
 		</ul>

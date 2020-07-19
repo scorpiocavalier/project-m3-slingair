@@ -1,30 +1,30 @@
-const flightSelect 	= document.getElementById('flight')
-const showSeatsBtn 	= document.getElementById('show-seats')
+const flightSelect = document.getElementById('flight')
+const showSeatsBtn = document.getElementById('show-seats')
 
 let flightNumber, seatNumber
 
 const renderSeats = flight => {
 	// Reset when selecting other flight options
-	document.getElementById('seats-section').innerHTML 			= ''
+	document.getElementById('seats-section').innerHTML = ''
 	document.querySelector('.form-container').style.display = 'block'
 
 	const letters = ['A', 'B', 'C', 'D', 'E', 'F']
-	const rows 		= flight.length / letters.length
+	const rows = flight.length / letters.length
 
 	for (let r = 0; r < rows; r++) {
 		const row = document.createElement('ol')
 		row.classList.add('row')
 
 		letters.forEach((letter, index) => {
-			const seatNumber 		= `${r+1}${letter}`
-			const seat 					= document.createElement('li')
+			const seatNumber = `${r + 1}${letter}`
+			const seat = document.createElement('li')
 
-			const seatOccupied 	= `<li><label class="seat"><span id="${seatNumber}" class="occupied">${seatNumber}</span></label></li>`
+			const seatOccupied = `<li><label class="seat"><span id="${seatNumber}" class="occupied">${seatNumber}</span></label></li>`
 			const seatAvailable = `<li><label class="seat"><input type="radio" name="seat" value="${seatNumber}" /><span id="${seatNumber}" class="avail">${seatNumber}</span></label></li>`
 
-			const seatIndex 		= r * 6 + index
-			const currentSeat 	= flight[seatIndex]
-			seat.innerHTML 			= currentSeat.isAvailable ? seatAvailable : seatOccupied
+			const seatIndex = r * 6 + index
+			const currentSeat = flight[seatIndex]
+			seat.innerHTML = currentSeat.isAvailable ? seatAvailable : seatOccupied
 
 			row.appendChild(seat)
 		})
@@ -48,12 +48,12 @@ const renderSeats = flight => {
 }
 
 const showFormContent = async event => {
-	const selectedOption 	= flightSelect.options[flightSelect.selectedIndex]
-	flightNumber 					= selectedOption.value
+	const selectedOption = flightSelect.options[flightSelect.selectedIndex]
+	flightNumber = selectedOption.value
 
 	try {
-		const res 		= await fetch(`/flights/${flightNumber}`)
-		const flight 	= await res.json()
+		const res = await fetch(`/flights/${flightNumber}`)
+		const flight = await res.json()
 		renderSeats(flight)
 	} catch { console.log("Invalid flight.") }
 }
@@ -63,14 +63,14 @@ const handleConfirmSeat = async event => {
 	document.getElementById('confirm-button').disabled = true
 
 	let newReservation = {
-		givenName: 	document.getElementById('givenName').value,
-		surname: 		document.getElementById('surname').value,
-		email: 			document.getElementById('email').value,
-		flight:			flightNumber,
-		seat:				seatNumber
+		givenName: document.getElementById('givenName').value,
+		surname: document.getElementById('surname').value,
+		email: document.getElementById('email').value,
+		flight: flightNumber,
+		seat: seatNumber
 	}
 
-	const res = await fetch('/flights/seat-select', {
+	const res = await fetch('/seat-select', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
@@ -79,7 +79,7 @@ const handleConfirmSeat = async event => {
 		body: JSON.stringify(newReservation)
 	})
 	const id = await res.json()
-	window.location.replace(`/flights/confirmed/reservation?id=${id}`)
+	window.location.replace(`/confirmed/reservation?id=${id}`)
 }
 
 flightSelect.addEventListener('change', event => showSeatsBtn.hidden = false)

@@ -1,0 +1,18 @@
+<% response.forEach(reservation => { %>
+<% const { id, flight, seat, givenName, surname, email } = reservation %>
+
+<div class="content confirmation">
+	<div class="user">
+		<p class="message">Ref ID: <%= email %></p>
+		<ul class="user-info">
+			<li>ID #: <span><%= id %></span></li>
+			<li>Flight #:<span><%= flight %></span></li>
+			<li>Seat #:<span><%= seat %></span></li>
+			<li>Name:<span><%= givenName %> <%= surname %></span></li>
+		</ul>
+	</div>
+</div>
+
+<% }) %>
+
+<p class="footer-logo">The only way to fly!</p>

@@ -30,8 +30,8 @@ router.get(`/confirmed/:id`, async (req, res) => {
   const { id } = req.query
   const options = fetchOptions(`/slingair/users/${id}`)
   try {
-    const reservation = await rp(options)
-    res.status(200).render('confirmed', { ...reservation })
+    const { data: reservation, status } = await rp(options)
+    res.status(status).render('confirmed', { ...reservation })
   } catch (err) {
     console.log(err.message)
   }
@@ -41,9 +41,9 @@ router.get(`/confirmed/:id`, async (req, res) => {
 router.get('/seat-select', async (req, res) => {
   const options = fetchOptions('/slingair/flights')
   try {
-    const data = await rp(options)
-    res.status(200).render('seat-select', {
-      flights: data['flights'],
+    const { flights, status } = await rp(options)
+    res.status(status).render('seat-select', {
+      flights,
       libs: ['seat-select']
     })
   } catch (err) {
@@ -58,8 +58,8 @@ router.post('/seat-select', async (req, res) => {
   const options = postOptions('/slingair/users', newReservation)
 
   try {
-    const response = await rp(options)
-    res.status(response.status).json(id)
+    const { reservation, status } = await rp(options)
+    res.status(status).send(reservation)
   } catch (err) {
     console.log(err.message)
   }
@@ -70,8 +70,8 @@ router.get('/flights/:flightNumber', async (req, res) => {
   const { flightNumber } = req.params
   const options = fetchOptions(`/slingair/flights/${flightNumber}`)
   try {
-    const data = await rp(options)
-    res.status(200).send(data[flightNumber])
+    const { [flightNumber]: flight , status } = await rp(options)
+    res.status(status).send(flight)
   } catch (err) {
     console.log(err.message)
   }
@@ -82,8 +82,8 @@ router.get('/reservations', async (req, res) => {
   const options = fetchOptions(`/slingair/users`)
 
   try {
-    const response = await rp(options)
-    res.render('reservations-all', { response })
+    const reservations = await rp(options)
+    res.render('reservations-all', { reservations })
   } catch (err) {
     console.log(err.message)
   }
@@ -95,8 +95,8 @@ router.get('/reservations/:email', async (req, res) => {
   const options = fetchOptions(`/slingair/users/${email}`)
 
   try {
-    const response = await rp(options)
-    res.render('reservations-one', { response })
+    const { data: reservation, status } = await rp(options)
+    res.status(status).render('reservations-one', { ...reservation })
   } catch (err) {
     console.log(err.message)
   }

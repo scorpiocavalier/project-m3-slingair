@@ -55,31 +55,31 @@ const showFormContent = async event => {
 		const res = await fetch(`/flights/${flightNumber}`)
 		const flight = await res.json()
 		renderSeats(flight)
-	} catch { console.log("Invalid flight.") }
+	} catch (err) { console.log("showFormContent:", err) }
 }
 
 const handleConfirmSeat = async event => {
 	event.preventDefault()
 	document.getElementById('confirm-button').disabled = true
 
-	let newReservation = {
-		givenName: document.getElementById('givenName').value,
-		surname: document.getElementById('surname').value,
-		email: document.getElementById('email').value,
-		flight: flightNumber,
-		seat: seatNumber
-	}
-
-	const res = await fetch('/seat-select', {
-		method: 'POST',
-		headers: {
-			'Accept': 'application/json',
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify(newReservation)
-	})
-	const id = await res.json()
-	window.location.replace(`/confirmed/reservation?id=${id}`)
+	try {
+		const res = await fetch('/seat-select', {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json',
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				givenName: document.getElementById('givenName').value,
+				surname: document.getElementById('surname').value,
+				email: document.getElementById('email').value,
+				flight: flightNumber,
+				seat: seatNumber
+			})
+		})
+		const reservation = await res.json()
+		window.location.replace(`/confirmed/reservation?id=${reservation.id}`)
+	} catch (err) { console.log("handleConfirmSeat:", err) }
 }
 
 flightSelect.addEventListener('change', event => showSeatsBtn.hidden = false)
